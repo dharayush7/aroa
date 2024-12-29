@@ -3,15 +3,20 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
+      "@constants": ["./constants/index.ts"],
+      "@assets/*": ["./assets/*"],
+      "@components/*": ["./components/*"],
+      "@lib/*": ["./lib/*"],
+      "@contexts/*": ["./contexts/*"],
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "index.d.ts",
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
   ]
 }

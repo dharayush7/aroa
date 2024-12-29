@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "Aora",
+    "slug": "aora",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "icon": "./assets/images/logo-small.png",
+    "scheme": "aora",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -13,9 +13,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/images/logo-small.png",
+        "backgroundColor": "#161622"
+      },
+      "package": "com.ayushdhar.aora"
     },
     "web": {
       "bundler": "metro",
@@ -27,10 +28,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/logo-small.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#161622"
         }
       ]
     ],

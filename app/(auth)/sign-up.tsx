@@ -17,7 +17,7 @@ export default function SignUp() {
 	});
 
 	const[isSubmitting, setSubmitting] = useState(false);
-  const { setUser, setLoggedIn } = useGlobalContext();
+  const { setUser, setIsLoggedIn } = useGlobalContext();
 
 	const submit = async () => {
     if(!form.email || !form.password || !form.username) {
@@ -31,7 +31,7 @@ export default function SignUp() {
           username: form.username
         });
         setUser(result);
-        setLoggedIn(true);
+        setIsLoggedIn(true);
         router.replace("/home");
       } catch(error) {
         Alert.alert("Error", "");

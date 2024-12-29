@@ -19,7 +19,7 @@ export const useGlobalContext = () => {
 };
 
 export default function GlobalProvider({ children }: React.PropsWithChildren) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 

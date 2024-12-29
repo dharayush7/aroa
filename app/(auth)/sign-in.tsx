@@ -16,7 +16,7 @@ export default function SignIn() {
 	});
 
 	const[isSubmitting, setSubmitting] = useState(false);
-  const { setUser, setLoggedIn } = useGlobalContext();
+  const { setUser, setIsLoggedIn } = useGlobalContext();
 
 	const submit = async () => {
     if(!form.email || !form.password) {
@@ -30,7 +30,7 @@ export default function SignIn() {
         });
 
         setUser(result);
-        setLoggedIn(true);
+        setIsLoggedIn(true);
         Alert.alert('Success', 'Logged in successfully');
 
         router.replace("/home");

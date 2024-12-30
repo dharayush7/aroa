@@ -35,7 +35,7 @@ export default function FromField({
 				}}
 			>
 				 <TextInput 
-				 	className="flex-1 w-full text-white font-psemibold text-base"
+				 	className="flex-1 w-full h-full text-white font-psemibold text-base"
 				 	value={value}
 				 	placeholder={placeHolder}
 				 	placeholderTextColor="#7b7b8b"

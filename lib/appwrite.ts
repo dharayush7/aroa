@@ -4,10 +4,11 @@ import {
 	ID, 
 	Avatars, 
 	Databases,
-	Query
+	Query,
+	Models
 } from 'react-native-appwrite';
 
-export const appwriteConfig = {
+const appwriteConfig = {
 	endpoint: process.env.EXPO_PUBLIC_ENDPOINT!,
 	platform: process.env.EXPO_PUBLIC_PLATFORM!,
 	projectId: process.env.EXPO_PUBLIC_PROJECT_ID!,
@@ -37,6 +38,21 @@ interface CreateUserProps {
 interface SignInProps {
 	email: string;
 	password: string;
+}
+
+interface CreatorType {
+	avatar: string;
+	username: string;
+}
+
+export interface PostType extends Models.Document {
+	$id: string;
+	$createdAt: string;
+	creator: CreatorType;
+	title: string;
+	prompt: string;
+	thumble: string;
+	video: string;
 }
 
 export const createUser = async (
@@ -103,5 +119,17 @@ export const getCurrentUser = async () => {
 
 	} catch(error) {
 		console.error(error);
+	}
+}
+
+export const getAllPosts = async () => {
+	try {
+		const posts = await databases.listDocuments(
+			appwriteConfig.datbaseId,
+			appwriteConfig.videoCollectionId,
+		);
+		return posts.documents as PostType[];
+	} catch(error) {
+		throw new Error;
 	}
 }

@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { useState, useEffect } from "react";
+import { View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
+import { VideoView, useVideoPlayer } from "expo-video";
 import { PostType } from "@lib/appwrite";
 import { icons } from "@constants";
 
+const width = Dimensions.get('window').width
 
 export default function VideoCard({ 
 	post: { title, 
@@ -13,6 +15,19 @@ export default function VideoCard({
 }: { post: PostType }) {
 
 	const [isPlay, setIsPlay] = useState(false);
+	const player = useVideoPlayer(video, (player) => {});
+
+	useEffect(() => {
+	  const subscription = player.addListener('playToEnd', () => {
+	    setIsPlay(false);
+	  	});
+	  }, [player]);
+
+		 useEffect(() => {
+		 	if(isPlay) {
+		 		player.play();
+		 	}
+		 }, [isPlay]);
 
 	return (
 		<View className="flex-col items-center px-4 mb-14">
@@ -50,7 +65,16 @@ export default function VideoCard({
 				</View>
 			</View>
 			{isPlay ? (
-				<Text className="text-white">Playing</Text>
+				<VideoView 
+					player={player}
+					showsTimecodes={false}
+					style={{
+						width: width - 10,
+						height: 240,
+						borderRadius: 12,
+						marginTop: 12
+					}}
+				/>
 			): (
 				<TouchableOpacity 
 					className="w-full h-60 rounded-xl mt-3 relative justify-center items-center" 

@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
-import { Text, View, FlatList, Image, RefreshControl, ListRenderItem } from "react-native";
+import { 
+	Text, 
+	View, 
+	FlatList, 
+	Image, 
+	RefreshControl, 
+	ListRenderItem 
+} from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from "@constants";
 import SearchInput from"@components/SearchInput";
 import Trending from "@components/Trending";
 import Empty from "@components/Empty";
 import VideoCard from "@components/VideoCard";
-import { getAllPosts, PostType } from "@lib/appwrite";
+import { getAllPosts, PostType, getLatestPosts } from "@lib/appwrite";
 import useAppwrite from "@lib/useAppwrite";
 
 
@@ -18,6 +25,7 @@ export default function Home() {
 		loading, 
 		refetch 
 	} = useAppwrite<PostType[]>(getAllPosts);	
+	const { data: latestPosts } = useAppwrite<PostType[]>(getLatestPosts);	
 
 	const onRefresh = async () => {
 		setRefreshing(true);
@@ -61,7 +69,7 @@ export default function Home() {
 							<Text className="text-gray-100 text-lg font-pregular mb-3">
 								Latest Videos
 							</Text>
-							<Trending posts={[{ id: 1 }, { id: 2 }, { id: 3 }] ?? []}/>
+							<Trending posts={latestPosts ?? []}/>
 						</View>
 					</View>
 				)}

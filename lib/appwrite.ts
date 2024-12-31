@@ -133,3 +133,16 @@ export const getAllPosts = async () => {
 		throw new Error;
 	}
 }
+
+export const getLatestPosts = async () => {
+	try {
+		const posts = await databases.listDocuments(
+			appwriteConfig.datbaseId,
+			appwriteConfig.videoCollectionId,
+			[Query.orderDesc('$createdAt'), Query.limit(7)]
+		);
+		return posts.documents as PostType[];
+	} catch(error) {
+		throw new Error;
+	}
+}

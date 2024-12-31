@@ -4,8 +4,7 @@ import {
 	View, 
 	FlatList, 
 	Image, 
-	RefreshControl, 
-	ListRenderItem 
+	RefreshControl,  
 } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from "@constants";
@@ -62,9 +61,7 @@ export default function Home() {
 							</View>
 						</View>
 
-						<SearchInput 
-						value={search} 
-						handleChangeText={(e) => setSearch(e.nativeEvent.text)} />
+						<SearchInput />
 						<View className="w-full flex-1 pt-5 pb-8">
 							<Text className="text-gray-100 text-lg font-pregular mb-3">
 								Latest Videos

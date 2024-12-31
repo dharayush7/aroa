@@ -5,6 +5,7 @@ import {
 	Image 
 } from "react-native";
 import { useState } from "react";
+import { usePathname, router } from "expo-router";
 import { icons } from "@constants";
 
 interface SearchInputProps{
@@ -12,9 +13,13 @@ interface SearchInputProps{
 	handleChangeText: (e: any) => void
 }
 
-export default function SearchInput({ value, handleChangeText }: SearchInputProps) {
+export default function SearchInput(
+	{ initialQuery }: { initialQuery?: string }
+) {
 
 	const [bc, setBc] = useState("#020617");
+	const [query, setQuery] = useState(initialQuery || "");
+	const pathname = usePathname();
 
 	return (
 		<View 
@@ -25,15 +30,23 @@ export default function SearchInput({ value, handleChangeText }: SearchInputProp
 		>
 			 <TextInput 
 			 	className="flex-1 w-full h-full text-white font-pregular text-base justify-center items-center"
-			 	value={value}
+			 	value={query}
 			 	placeholder="Search for a video topic"
-			 	placeholderTextColor="#7b7b8b"
-			 	onChange={handleChangeText}
+			 	placeholderTextColor="#CDCDE0"
+			 	onChange={(e) => setQuery(e.nativeEvent.text)}
 				onFocus={() => {setBc("#FF9C01")}}
 				onBlur={() => {setBc("#020617")}} 
 			/>
 
-			 <TouchableOpacity>
+			 <TouchableOpacity
+			 	onPress={() => {
+			 		if(query) {
+			 			if (pathname.startsWith('/search')) 
+			 				router.setParams({ query });
+			 			else router.push(`/search/${query}`);
+			 		}
+			 	}}
+			 >
 			 	<Image 
 			 		source={icons.search}
 			 		className="w-5 h-5"

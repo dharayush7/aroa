@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Text, View, ScrollView, Image } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Redirect, router } from "expo-router";
@@ -8,9 +9,13 @@ import { useGlobalContext } from "@contexts/GlobalProvider";
 
 
 export default function Home() {
-  const { isLoading, isLoggedIn } = useGlobalContext();
+  const { isLoading, isLoggedIn, setUser } = useGlobalContext();
   if(!isLoading && isLoggedIn) return <Redirect href="/home" />;
   
+  useEffect(() => {
+    if(!isLoading && !isLoggedIn) setUser(null);
+  }, [isLoading, isLoggedIn]);
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerStyle={{ height: "100%" }}>

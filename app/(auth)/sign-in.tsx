@@ -5,7 +5,7 @@ import { Link, router } from "expo-router";
 import { images } from "@constants";
 import FormField from "@components/FormField";
 import CustomButton from "@components/CustomButton";
-import { signIn } from "@lib/appwrite";
+import { signIn, getCurrentUser } from "@lib/appwrite";
 import { useGlobalContext } from "@contexts/GlobalProvider";
 
 export default function SignIn() {
@@ -28,8 +28,8 @@ export default function SignIn() {
           email: form.email,
           password: form.password,
         });
-
-        setUser(result);
+        const user = await getCurrentUser()
+        setUser(user);
         setIsLoggedIn(true);
         Alert.alert('Success', 'Logged in successfully');
 

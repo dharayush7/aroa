@@ -5,7 +5,7 @@ import { Link, router } from "expo-router";
 import { images } from "@constants";
 import FormField from "@components/FormField";
 import CustomButton from "@components/CustomButton";
-import { createUser } from "@lib/appwrite";
+import { createUser, getCurrentUser } from "@lib/appwrite";
 import { useGlobalContext } from "@contexts/GlobalProvider";
 
 export default function SignUp() {
@@ -30,7 +30,8 @@ export default function SignUp() {
           password: form.password,
           username: form.username
         });
-        setUser(result);
+        const user = await getCurrentUser();
+        setUser(user);
         setIsLoggedIn(true);
         router.replace("/home");
       } catch(error) {

@@ -146,3 +146,42 @@ export const getLatestPosts = async () => {
 		throw new Error;
 	}
 }
+
+export const searchPost = async (query: string) => {
+	try {
+		const posts = await databases.listDocuments(
+			appwriteConfig.datbaseId,
+			appwriteConfig.videoCollectionId,
+			[Query.search('title', query)]
+		);
+		return posts.documents as PostType[];
+	} catch(error) {
+		console.log(error);
+		throw new Error;
+	}
+}
+
+export const getUserPost = async (userId: string) => {
+	try {
+		const posts = await databases.listDocuments(
+			appwriteConfig.datbaseId,
+			appwriteConfig.videoCollectionId,
+			[Query.equal('creator', userId)]
+		);
+		return posts.documents as PostType[];
+	} catch(error) {
+		console.log(error);
+		throw new Error;
+	}
+}
+
+
+export const signOut = async () => {
+	try {
+		const session = await account.deleteSession('current');
+		return session;
+	} catch (err) {
+		console.log(err);
+		throw new Error;
+	}
+}

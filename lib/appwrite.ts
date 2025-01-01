@@ -85,7 +85,7 @@ export const createUser = async (
 		return newUser;
 	} catch (error) {
 		console.error(error);
-		throw new Error(error as string)
+		throw new Error;
 	}
 }
 
@@ -97,7 +97,7 @@ export const signIn = async (
 		return session;
 	} catch(error) {
 		console.error(error);
-		throw new Error(error as string);
+		throw new Error;
 	}
 }
 

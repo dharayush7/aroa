@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { 
 	View,
 	FlatList,
 	Image,
-	TouchableOpacity
+	TouchableOpacity,
+	ActivityIndicator
 } from "react-native";
 import { router } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -73,7 +74,7 @@ export default function Profile() {
 							containerStyle="mt-5"
 							titleStyle="text-2xl"
 						/>
-						<View className="mt-5 flex-row">
+						<View className="mt-5 flex-row mb-6">
 							<InfoBox 
 								title={len}
 								subtitle="Posts"
@@ -81,13 +82,20 @@ export default function Profile() {
 								subtitleStyle="text-xl"
 							/>
 						</View>
+						{loading && (
+							  <ActivityIndicator size="large" color="#F3F4F6" />
+						)}
 					</View>
 				)}
 				ListEmptyComponent={() => (
-					<Empty 
-						title="No Videos are posted"
-						subtitle="Upload a New Video Now"
-					/>
+					<>
+					{!loading && (
+						<Empty 
+							title="No Videos are posted"
+							subtitle="Upload a New Video Now"
+						/>
+					)}
+					</>
 				)}
 			/>
 		</SafeAreaView>

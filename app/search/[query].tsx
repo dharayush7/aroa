@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { 
 	Text, 
 	View, 
 	FlatList, 
+	ActivityIndicator
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,7 +21,8 @@ export default function Search() {
 	const { query: prm } = useLocalSearchParams();
 	const query = prm.toString();
 	const { 
-		data: posts, 
+		data: posts,
+		loading, 
 		refetch 
 	} = useAppwrite<PostType[]>(() => searchPost(query));		
 
@@ -47,13 +49,20 @@ export default function Search() {
 						<View className="mt-6 mb-8">
 							<SearchInput initialQuery={query} />
 						</View>
+						{loading && (
+							  <ActivityIndicator size="large" color="#F3F4F6" />
+						)}
 					</View>
 				)}
 				ListEmptyComponent={() => (
-					<Empty 
-						title="No Videos Found"
-						subtitle="No videos found for this search"
-					/>
+					<>
+						{!loading && (
+							<Empty 
+								title="No Videos Found"
+								subtitle="No videos found for this search"
+							/>
+						)}
+					</>
 				)}
 			/>
 		</SafeAreaView>

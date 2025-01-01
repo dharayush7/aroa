@@ -1,9 +1,11 @@
-import { Text, View, ScrollView, Image, Alert } from "react-native";
+import { Text, View, ScrollView, Image } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from "react";
 import { Link, router } from "expo-router";
 import { images } from "@constants";
 import FormField from "@components/FormField";
+import LoadingDialog from "@components/LoadingDialog"
+import DialogBoxWithOption from "@components/DialogBoxWithOption"
 import CustomButton from "@components/CustomButton";
 import { signIn, getCurrentUser } from "@lib/appwrite";
 import { useGlobalContext } from "@contexts/GlobalProvider";
@@ -16,11 +18,14 @@ export default function SignIn() {
 	});
 
 	const[isSubmitting, setSubmitting] = useState(false);
+  const [showDialog, setShowDialog] = useState(false)
+  const [msg, setMsg] = useState("");
   const { setUser, setIsLoggedIn } = useGlobalContext();
 
 	const submit = async () => {
     if(!form.email || !form.password) {
-      Alert.alert('Error', 'Please fill all the fields');
+      setMsg("Please fill all nesseccary fields");
+      setShowDialog(true);
     } else {
       setSubmitting(true);
       try{
@@ -31,12 +36,11 @@ export default function SignIn() {
         const user = await getCurrentUser()
         setUser(user);
         setIsLoggedIn(true);
-        Alert.alert('Success', 'Logged in successfully');
-
         router.replace("/home");
       } catch(error) {
-        Alert.alert("Error", "");
-        console.log(error);
+        setMsg("Invalid credentials");
+        setShowDialog(true);
+        console.log("err", error);
       } finally {
         setSubmitting(false)
       }
@@ -46,7 +50,7 @@ export default function SignIn() {
 	return (
 		<SafeAreaView className="bg-primary h-full">
 			<ScrollView>
-				<View className="w-full min-h-[85vh] px-4 my-4 justify-center">
+				<View className="w-full min-h-[85vh] px-4 my-4 justify-center relative">
 					<Image 
 						source={images.logo} 
 						className="w-[115px] h-[35px]"
@@ -94,6 +98,15 @@ export default function SignIn() {
             </Link>
           </View>
 				</View>
+        {isSubmitting && (
+          <LoadingDialog title="Logging In..."/>
+        )}
+        <DialogBoxWithOption 
+          title={msg} 
+          textTitle="try again" 
+          showDialog={showDialog} 
+          setShowDialog={setShowDialog}
+        />
 			</ScrollView>
 		</SafeAreaView>
 	)

@@ -1,10 +1,12 @@
-import { Text, View, ScrollView, Image, Alert } from "react-native";
+import { Text, View, ScrollView, Image } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from "react";
 import { Link, router } from "expo-router";
 import { images } from "@constants";
 import FormField from "@components/FormField";
 import CustomButton from "@components/CustomButton";
+import LoadingDialog from "@components/LoadingDialog";;
+import DialogBoxWithOption from "@components/DialogBoxWithOption"
 import { createUser, getCurrentUser } from "@lib/appwrite";
 import { useGlobalContext } from "@contexts/GlobalProvider";
 
@@ -18,10 +20,13 @@ export default function SignUp() {
 
 	const[isSubmitting, setSubmitting] = useState(false);
   const { setUser, setIsLoggedIn } = useGlobalContext();
+  const [showDialog, setShowDialog] = useState(false)
+  const [msg, setMsg] = useState("");
 
 	const submit = async () => {
     if(!form.email || !form.password || !form.username) {
-      Alert.alert('Error', 'Please fill all the fields');
+      setMsg("Please fill all nesseccary fields");
+      setShowDialog(true);
     } else {
       setSubmitting(true);
       try{
@@ -35,8 +40,8 @@ export default function SignUp() {
         setIsLoggedIn(true);
         router.replace("/home");
       } catch(error) {
-        Alert.alert("Error", "");
-        console.log(error);
+        setMsg("Invalid credentials");
+        setShowDialog(true);
       } finally {
         setSubmitting(false)
       }
@@ -106,6 +111,15 @@ export default function SignUp() {
             </Link>
           </View>
 				</View>
+        {isSubmitting && (
+          <LoadingDialog title="Creating Account..."/>
+        )}
+        <DialogBoxWithOption 
+          title={msg} 
+          textTitle="try again" 
+          showDialog={showDialog} 
+          setShowDialog={setShowDialog}
+        />
 			</ScrollView>
 		</SafeAreaView>
 	)

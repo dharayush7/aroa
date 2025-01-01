@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { 
 	Text, 
 	View, 
 	FlatList, 
 	Image, 
-	RefreshControl,  
+	RefreshControl, 
+	ActivityIndicator 
 } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from "@constants";
@@ -68,13 +69,20 @@ export default function Home() {
 							</Text>
 							<Trending posts={latestPosts ?? []}/>
 						</View>
+						{loading && (
+							  <ActivityIndicator size="large" color="#F3F4F6" />
+						)}
 					</View>
 				)}
 				ListEmptyComponent={() => (
-					<Empty 
-						title="No Videos Found"
-						subtitle="Be the first one to upload a video"
-					/>
+					<>
+						{!loading && (
+						<Empty 
+							title="No Videos Found"
+							subtitle="Be the first one to upload a video"
+						/>
+						)}
+					</>
 				)}
 				refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 			/>

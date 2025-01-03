@@ -7,7 +7,9 @@ import { icons } from "@constants";
 const width = Dimensions.get('window').width
 
 export default function VideoCard({ 
-	post: { title, 
+	post: { 
+		title, 
+		prompt,
 		thumble, 
 		video, 
 		creator: { username, avatar }
@@ -55,14 +57,12 @@ export default function VideoCard({
 						</Text>
 					</View>
 				</View>
-
-				<View className="pt-2">
-					<Image 
-						source={icons.menu}
-						className="w-5 h-5"
-						resizeMode="contain"
-					/>
-				</View>
+			</View>
+			<View className="mt-3 items-start w-full">
+				<Text 
+				className="text-sm text-gray-100 font-pregular text-start"
+				numberOfLines={3}
+				>{prompt}</Text>
 			</View>
 			{isPlay ? (
 				<VideoView 

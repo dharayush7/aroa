@@ -19,16 +19,16 @@ export default function DialogBoxWithOption({
 		<>
 		{showDialog && (
 			<View className="w-full h-full absolute flex-1 justify-center items-center">
-				<View className="w-[90%] items-center justify-center py-4 px-4 bg-white rounded-xl">
+				<View className="w-full items-center justify-center pt-4 pb-4 px-4 bg-white rounded-xl">
 					<Text className="text-black text-lg text-pregular">
 						{title}
 					</Text>
 						<TouchableOpacity 
-							className="items-end w-full mt-4"
+							className="items-end w-full mt-6"
 							activeOpacity={0.7}
 							onPress={() => setShowDialog(false)}
 						>
-							<Text className="p-2 text-secondary text-md text-center">
+							<Text className="pr-2 text-secondary text-md text-center">
 								{textTitle}
 							</Text>
 						</TouchableOpacity>

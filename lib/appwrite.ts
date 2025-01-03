@@ -5,7 +5,9 @@ import {
 	Avatars, 
 	Databases,
 	Query,
-	Models
+	Models,
+	Storage,
+	ImageGravity
 } from 'react-native-appwrite';
 
 const appwriteConfig = {
@@ -28,6 +30,7 @@ client
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
+const storage = new Storage(client);
 
 interface CreateUserProps {
 	email: string;
@@ -53,6 +56,14 @@ export interface PostType extends Models.Document {
 	prompt: string;
 	thumble: string;
 	video: string;
+}
+
+interface CreateVideoProps {
+	title: string;
+	video: any;
+	thumbonail: any;
+	prompt: string;
+	userId: string;
 }
 
 export const createUser = async (
@@ -127,6 +138,8 @@ export const getAllPosts = async () => {
 		const posts = await databases.listDocuments(
 			appwriteConfig.datbaseId,
 			appwriteConfig.videoCollectionId,
+			[Query.orderDesc('$createdAt')]
+
 		);
 		return posts.documents as PostType[];
 	} catch(error) {
@@ -166,7 +179,7 @@ export const getUserPost = async (userId: string) => {
 		const posts = await databases.listDocuments(
 			appwriteConfig.datbaseId,
 			appwriteConfig.videoCollectionId,
-			[Query.equal('creator', userId)]
+			[Query.equal('creator', userId), Query.orderDesc('$createdAt')]
 		);
 		return posts.documents as PostType[];
 	} catch(error) {
@@ -182,6 +195,84 @@ export const signOut = async () => {
 		return session;
 	} catch (err) {
 		console.log(err);
+		throw new Error;
+	}
+}
+
+const getFilePreview = async (fileId: string, type: string) => {
+	let fileUrl;
+
+	try {
+		if (type === "video") {
+			fileUrl = await storage.getFileView(appwriteConfig.storageId, fileId); 
+		} else if(type === "image") {
+			fileUrl = await storage.getFilePreview(
+				appwriteConfig.storageId,
+				fileId,
+				2000,
+				2000,
+				ImageGravity.Top,
+				100
+			);
+		} else {
+		throw new Error("Inavlid type of file");
+		}
+		if (!fileUrl) {
+		throw new Error("No file found");
+		}
+		return fileUrl;
+	} catch(err) {
+		console.error(err);
+		throw new Error;
+	}
+}
+
+const uploadFile = async (file: any, type: string) => {
+	const asset = {
+		name: file.name,
+		type: file.mimeType,
+		uri: file.uri,
+		size: file.size
+	};
+	console.log(asset);
+	try {
+		const res = await storage.createFile(
+			appwriteConfig.storageId,
+			ID.unique(),
+			asset
+		);
+		const fileUrl = await getFilePreview(res.$id, type);
+		return fileUrl;
+	} catch (err) {
+		console.error(err);
+		throw new Error;
+	}
+}
+
+export const createVideo = async (form: CreateVideoProps) => {
+	try {
+		console.log(form);
+		const [thumbonailUrl, videoUrl] = await Promise.all([
+			uploadFile(form.thumbonail, "image"),
+			uploadFile(form.video, "video")
+	]);
+
+		const newPost = await databases.createDocument(
+			appwriteConfig.datbaseId,
+			appwriteConfig.videoCollectionId,
+			ID.unique(), 
+			{
+				title: form.title,
+				prompt:form.prompt,
+				thumble: thumbonailUrl,
+				video: videoUrl,
+				creator: form.userId
+			}
+		);
+
+		return newPost;
+	} catch(err) {
+		console.error(err);
 		throw new Error;
 	}
 }

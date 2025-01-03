@@ -9,6 +9,9 @@ dist/
 web-build/
 expo-env.d.ts
 
+# build
+build/
+
 # Native
 *.orig.*
 *.jks
@@ -37,3 +40,7 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+# credentials
+credentials.json
+credentials/

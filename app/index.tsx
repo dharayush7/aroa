@@ -51,7 +51,7 @@ export default function Home() {
          containerStyle="w-full mt-5"
          isLoading={false}
          />
-
+         <Text className="mt-12 text-gray-100 font-pregular">Devoloped by AYUSH DHAR</Text>
         </View>
       </ScrollView>
       <StatusBar backgroundColor="#161622" style="light" />
